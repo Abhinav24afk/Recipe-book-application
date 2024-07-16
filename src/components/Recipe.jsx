@@ -24,14 +24,12 @@ const Recipe = () => {
         fetchRecipe();
     }, [idMeal]);
 
-    // Display loading message while fetching data
     if (loading) return <div>Loading...</div>;
 
-    // If recipe not found, display message
     if (!recipe) return <div>No recipe found</div>;
 
     return (
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
+        <div className="w-full md: max-w-4xl mx-auto p-4">
             {/* Back button */}
             <button
                 onClick={() => navigate(-1)}
@@ -40,45 +38,29 @@ const Recipe = () => {
                 <FaArrowLeft className="h-3 w-3 mr-2" />
                 Back
             </button>
-
             {/* Recipe details */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {/* Left column: Title, Image, Ingredients */}
-                <div>
-                    <h1 className="text-3xl font-bold mb-4">{recipe.strMeal}</h1>
-                    <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-auto rounded-lg mb-4" />
-                    <h2 className="text-2xl font-bold mb-2">Ingredients</h2>
-                    <ul className="list-disc list-inside mb-4">
-                        {Array.from({ length: 20 }).map((_, i) => {
-                            const ingredient = recipe[`strIngredient${i + 1}`];
-                            const measure = recipe[`strMeasure${i + 1}`];
-                            return ingredient ? <li key={i}>{`${ingredient} - ${measure}`}</li> : null;
-                        })}
-                    </ul>
+            <h1 className="text-3xl font-bold mb-4">{recipe.strMeal}</h1>
+            <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-[600px] h-auto rounded-lg mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Ingredients</h2>
+            <ul className="list-disc list-inside mb-4">
+                {Array.from({ length: 20 }).map((_, i) => {
+                    const ingredient = recipe[`strIngredient${i + 1}`];
+                    const measure = recipe[`strMeasure${i + 1}`];
+                    return ingredient ? <li key={i}>{`${ingredient} - ${measure}`}</li> : null;
+                })}
+            </ul>
+            <h2 className="text-2xl font-bold mb-2">Instructions</h2>
+            <p className="mb-4">{recipe.strInstructions}</p>
+            {recipe.strYoutube && (
+                <div className="mb-4">
+                    <h2 className="text-2xl font-bold mb-2">Video</h2>
+                    <a href={recipe.strYoutube} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                        Watch on YouTube
+                    </a>
                 </div>
-
-                {/* Right column: Instructions, Video */}
-                <div>
-                    <h2 className="text-2xl font-bold mb-2">Instructions</h2>
-                    <p className="mb-4">{recipe.strInstructions}</p>
-                    {recipe.strYoutube && (
-                        <div className="mb-4">
-                            <h2 className="text-2xl font-bold mb-2">Video</h2>
-                            <a
-                                href={recipe.strYoutube}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-500 underline"
-                            >
-                                Watch on YouTube
-                            </a>
-                        </div>
-                    )}
-                </div>
-            </div>
+            )}
         </div>
     );
 };
 
 export default Recipe;
-

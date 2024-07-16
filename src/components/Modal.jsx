@@ -95,7 +95,7 @@ const Modal = ({
                 {/* Close button */}
                 <button
                     onClick={() => setShowModal(false)}
-                    className="absolute top-2 right-2 text-2xl"
+                    className="absolute top-[0px] right-[10px] text-2xl"
                 >
                     ×
                 </button>

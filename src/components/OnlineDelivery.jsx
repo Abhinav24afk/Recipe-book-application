@@ -21,8 +21,8 @@ const OnlineDelivery = () => {
 
     const navigate = useNavigate();
 
-    // Fetch restaurants based on selected filters
-    const fetchRestaurants = async (area, category, ingredient) => {
+    // Fetch recipe based on selected filters
+    const fetchRecipe = async (area, category, ingredient) => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
@@ -33,11 +33,22 @@ const OnlineDelivery = () => {
             const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?${params.toString()}`);
             setData(response?.data?.meals);
         } catch (error) {
-            console.error("Error fetching the restaurants for delivery", error);
+            console.error("Error fetching the recipe", error);
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (location.state) {
+            const { selectedArea, selectedCategory, selectedIngredient, currentPage, data } = location.state;
+            setSelectedArea(selectedArea);
+            setSelectedCategory(selectedCategory);
+            setSelectedIngredient(selectedIngredient);
+            setCurrentPage(currentPage);
+            setData(data);
+        }
+    }, [location.state]);
 
     // Fetch list of areas from API
     const fetchAreas = async () => {
@@ -74,7 +85,7 @@ const OnlineDelivery = () => {
         fetchAreas();
         fetchCategories();
         fetchIngredients();
-        fetchRestaurants(selectedArea, selectedCategory, selectedIngredient);
+        fetchRecipe(selectedArea, selectedCategory, selectedIngredient);
     }, []);
 
     // Handle selection of an area filter
@@ -101,9 +112,9 @@ const OnlineDelivery = () => {
         setCurrentPage(1);
     };
 
-    // Fetch restaurants when filters change
+    // Fetch recipe when filters change
     useEffect(() => {
-        fetchRestaurants(selectedArea, selectedCategory, selectedIngredient);
+        fetchRecipe(selectedArea, selectedCategory, selectedIngredient);
     }, [selectedArea, selectedCategory, selectedIngredient]);
 
     // Pagination calculations
@@ -122,7 +133,7 @@ const OnlineDelivery = () => {
             {/* Filter and Modal */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 {/* Filter button */}
-                <div className="p-2 rounded-xl shadow cursor-pointer flex items-center" onClick={() => setShowModal(true)}>
+                <div className="p-2 rounded-xl shadow cursor-pointer flex items-center mb-2" onClick={() => setShowModal(true)}>
                     Filter <BsFilterLeft className="ml-1" />
                 </div>
 
